@@ -13,6 +13,7 @@ header, footer {
     background-color: var(--main-color);
     color: white;
 }
+
 header {
     margin-bottom: 20px;
 }
