@@ -29,7 +29,7 @@ def paises():
     fVentas = open('./sales.csv', 'r')
     csvreader = csv.reader(fVentas, delimiter= ',')
     d = {}
-    for linea in csvreader:
+    for linea in csvreader: 
         if linea[0] == region_name:
             if linea[1] in d:
                 d[linea[1]]['ingresos'] += float(linea[11])
@@ -50,6 +50,18 @@ def productos():
     conn.close()
     return render_template('productos.html', productos=productos) 
 
-@app.route("/addproducto")
+@app.route("/addproducto", methods=['GET', 'POST'])
 def addproduct():
-    return render_template('newproduct.html')
+    if request.method == 'GET':
+        return render_template('newproduct.html')
+    else:
+        '''
+        conn
+        cur
+        insert
+        commit
+        '''
+        
+        return 'Debo grabar un registro con {}, {}, {}'.format(request.values['tipo_producto'], 
+                                                               request.values['precio_unitario'], 
+                                                               request.values['coste_unitario'])
