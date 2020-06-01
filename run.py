@@ -5,8 +5,9 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    fVentas = open('./sales10.csv', 'r')
+    fVentas = open('./sales.csv', 'r')
     csvreader = csv.reader(fVentas, delimiter=',')
+    print('Hola, acra')   
 
     d = {}
     for linea in csvreader:
@@ -24,7 +25,7 @@ def index():
 def paises():
     region_name = request.values['region']
 
-    fVentas = open('./sales10.csv', 'r')
+    fVentas = open('./sales.csv', 'r')
     csvreader = csv.reader(fVentas, delimiter= ',')
     d = {}
     for linea in csvreader:
