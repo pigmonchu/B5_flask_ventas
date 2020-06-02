@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FloatField, SubmitField
+from wtforms import StringField, FloatField, SubmitField, HiddenField
 from wtforms.validators import DataRequired, Length, ValidationError
 
 def valida_coste(form, field):
@@ -7,6 +7,7 @@ def valida_coste(form, field):
         raise ValidationError('Ya te he dicho que el coste unitario ha de ser menor que el precio.')
 
 class ProductForm(FlaskForm):
+    id = HiddenField('id')
     tipo_producto = StringField('Tipo de Producto', validators=[DataRequired(), Length(min=3, message="Debe tener al menos tres caracteres")])
     precio_unitario = FloatField('Precio U.', validators=[DataRequired(message="Introduce algo, nano")])
     coste_unitario = FloatField('Coste U.', validators=[DataRequired(), valida_coste])

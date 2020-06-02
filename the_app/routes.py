@@ -77,18 +77,35 @@ def addproduct():
 
 @app.route("/modificaproducto", methods=["GET", "POST"])
 def modifica_producto():
-    id = request.values['id']
-    
-    conn = sqlite3.connect(app.config['BASE_DATOS'])
-    cur = conn.cursor()
-    query = "SELECT id, tipo_producto, precio_unitario, coste_unitario FROM productos where id = ?;"
+    if request.method == 'GET':
+        id = request.values.get('id')
+        
+        conn = sqlite3.connect(app.config['BASE_DATOS'])
+        cur = conn.cursor()
+        query = "SELECT id, tipo_producto, precio_unitario, coste_unitario FROM productos where id = ?;"
 
-    cur.execute(query, (id,))
+        cur.execute(query, (id,))
 
-    fila = cur.fetchone()
+        fila = cur.fetchone()
+        conn.close()
+        if fila:
+            form = ProductForm(data={'id': fila[0], 'tipo_producto': fila[1], 'precio_unitario': fila[2], 'coste_unitario': fila[3]})
+            form.submit.label.text = "Modificar"
+            return render_template('modproduct.html', form=form)
+        else:
+            return redirect(url_for("productos"))
+    else:
+        form = ProductForm(request.form)
+        if form.validate():
+            conn = sqlite3.connect(app.config['BASE_DATOS'])
+            cur = conn.cursor()
 
-    form = ProductForm({'id': fila[0], 'tipo_producto': fila[1], 'precio_unitario': fila[2], 'coste_unitario': fila[3]})
-    
+            query = "UPDATE productos SET tipo_producto = ?, precio_unitario = ?, coste_unitario = ? WHERE id = ?;"
+            cur.execute(query, (form.tipo_producto.data, form.precio_unitario.data, form.coste_unitario.data, form.id.data))
+            conn.commit()
+            conn.close()
+            return redirect(url_for("productos"))
 
-    return render_template('modproduct.html', form=form)
-    
+        else:
+            form.submit.label.text = "Modificar"
+            return render_template('modproduct.html', form=form)

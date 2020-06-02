@@ -6,6 +6,8 @@
 <h1>Detalle de producto</h1>
 <form action="/modificaproducto" class="u-full-width" method="post">
     {{ form.hidden_tag() }}
+    
+    {{ form.tipo_producto.label}}
     {% if form.tipo_producto.errors %}
         {{ form.tipo_producto(class="u-full-width error", placeholder="Producto") }}
         {% for error in form.tipo_producto.errors %}
@@ -16,8 +18,9 @@
         {{ form.tipo_producto(class="u-full-width", placeholder="Producto") }}
     {% endif %}
     
+    {{ form.precio_unitario.label}}
     {% if form.precio_unitario.errors %}
-        {{ form.precio_unitario(class="u-full-width error", placeholder="Precio unitario") }}
+    {{ form.precio_unitario(class="u-full-width error", placeholder="Precio unitario") }}
         {% for error in form.precio_unitario.errors %}
             <p class="error-msg">{{ error }}</p>
         {% endfor%}
@@ -25,6 +28,7 @@
         {{ form.precio_unitario(class="u-full-width", placeholder="Precio unitario") }}
     {% endif %}
 
+    {{ form.coste_unitario.label}}
     {% if form.coste_unitario.errors %}
         {{ form.coste_unitario(class="u-full-width error", placeholder="Coste") }}
         {% for error in form.coste_unitario.errors %}
