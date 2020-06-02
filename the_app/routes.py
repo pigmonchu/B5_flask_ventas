@@ -53,6 +53,7 @@ def productos():
 
 @app.route("/addproducto", methods=['GET', 'POST'])
 def addproduct():
+
     form = ProductForm(request.form)
 
     if request.method == 'GET':
@@ -72,3 +73,22 @@ def addproduct():
             return redirect(url_for("productos"))
         else:
             return render_template('newproduct.html', form=form)
+
+
+@app.route("/modificaproducto", methods=["GET", "POST"])
+def modifica_producto():
+    id = request.values['id']
+    
+    conn = sqlite3.connect(app.config['BASE_DATOS'])
+    cur = conn.cursor()
+    query = "SELECT id, tipo_producto, precio_unitario, coste_unitario FROM productos where id = ?;"
+
+    cur.execute(query, (id,))
+
+    fila = cur.fetchone()
+
+    form = ProductForm({'id': fila[0], 'tipo_producto': fila[1], 'precio_unitario': fila[2], 'coste_unitario': fila[3]})
+    
+
+    return render_template('modproduct.html', form=form)
+    
