@@ -1,6 +1,6 @@
 import csv, sqlite3
 from the_app import app
-from the_app.forms import ProductForm
+from the_app.forms import ProductForm, ModProductForm
 
 from flask import render_template, request, redirect, url_for
 
@@ -89,13 +89,13 @@ def modifica_producto():
         fila = cur.fetchone()
         conn.close()
         if fila:
-            form = ProductForm(data={'id': fila[0], 'tipo_producto': fila[1], 'precio_unitario': fila[2], 'coste_unitario': fila[3]})
-            form.submit.label.text = "Modificar"
+            form = ModProductForm(data={'id': fila[0], 'tipo_producto': fila[1], 'precio_unitario': fila[2], 'coste_unitario': fila[3]})
             return render_template('modproduct.html', form=form)
         else:
             return redirect(url_for("productos"))
     else:
-        form = ProductForm(request.form)
+           
+        form = ModProductForm(request.form)
         if form.validate():
             conn = sqlite3.connect(app.config['BASE_DATOS'])
             cur = conn.cursor()
@@ -107,5 +107,4 @@ def modifica_producto():
             return redirect(url_for("productos"))
 
         else:
-            form.submit.label.text = "Modificar"
             return render_template('modproduct.html', form=form)
